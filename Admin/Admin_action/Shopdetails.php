@@ -3,14 +3,17 @@ header("Access-Control-Allow-Origin:*");
 header("Access-Control-Allow-Headers:Content-Type");
 
 // include('C:\Xampp docs\htdocs\Backend\dbcon.php');
-$server = "localhost";
+$server = "127.0.0.1:3307";
 $username = "root";
 $password = "";
 $database = "admin";
 $conn=mysqli_connect($server,$username,$password,$database);
 
 
-// if ($_SERVER["REQUEST_METHOD"]=="POST" ) {
+$requestMethod=$_SERVER["REQUEST_METHOD"];
+$type=isset($_GET['type'])?$_GET['type']:'';
+
+if ($requestMethod=="POST" && $type=="insert_shop" ) {
     header("Content-Type: application/json");
     $shopdetails_data=file_get_contents("php://input");
     $decoded_shopdetails_data=json_decode($shopdetails_data,true);
@@ -40,5 +43,22 @@ else {
     print_r(json_encode($Error));
     
 }
-// }
+
+}elseif ($requestMethod=="POST" && $type=="delete_shop") {
+    header("Content-Type: application/json");
+    $shop_delete_id_input=file_get_contents("php://input");
+    $decoded_delete_shop_id=json_decode($shop_delete_id_input,true);
+    $delete_shop_id=$decoded_delete_shop_id['deleting_shop_id'];
+
+    $product_delete_query="DELETE from productdetails where pid=$delete_shop_id";
+    mysqli_query($conn,$product_delete_query);
+
+    $shop_delete_query="DELETE from shopdetails where sid=$delete_shop_id";
+    mysqli_query($conn,$shop_delete_query);
+
+    $msg=array("status"=>"Deleted Successfully");
+    echo json_encode($msg);
+}
+
+
 ?>

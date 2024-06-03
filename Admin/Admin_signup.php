@@ -2,7 +2,7 @@
 header("Access-Control-Allow-Origin:*");
 header("Access-Control-Allow-Headers:Content-Type");
 
-$server = "localhost";
+$server = "127.0.0.1:3307";
 $username = "root";
 $password = "";
 $database = "admin";
@@ -19,11 +19,19 @@ if ($_SERVER["REQUEST_METHOD"]=="POST" && $_GET["type"]=="admin_signup") {
    $admin_email=$decoded_admin_signup_data['admin_email'];
    $admin_password=$decoded_admin_signup_data['admin_password'];
 
-// Insert data to the database
+   $Error= array("Error"=>"Account already exists");
+   $Success=array("success"=>" Account is found");
 
+   // check whether he is their or not
+   $finding_admin = "SELECT id FROM login where email='$admin_email' AND password='$admin_password'";
+   $response = mysqli_query($conn, $finding_admin);
+
+   if (mysqli_num_rows($response)>0) {
+      print_r(json_encode($Error));
+   }
+else{
+// Insert data to the database
 $insert_admin_query ="INSERT INTO login (`id`,`name`,`email`,`password`) VALUES ('','$admin_name','$admin_email','$admin_password') ";
-$Error= array("Error"=>"Invalid field");
-$Success=array("success"=>" Account is found");
 mysqli_query($conn, $insert_admin_query);
 
 
@@ -37,7 +45,5 @@ while ($row=mysqli_fetch_assoc($result)) {
 }
 echo json_encode($admin_id);
 }
-else{
-print_r(json_encode($Error));
 }
 }
