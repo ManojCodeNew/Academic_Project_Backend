@@ -29,10 +29,20 @@ if ($requestMethod=="POST" && $type=="add_product") {
     $msg=array("status"=>"product added Successfully");
     echo json_encode($msg);
 
-    $display_added_product_query="SELECT * FROM productdetails where pid=$product_id";
-    $Query_response=mysqli_query($conn,$display_added_product_query);
+   
     
-    
+}elseif ($requestMethod=="POST" && $type=="product") {
+    header("Content-Type:application/json");
+    $products_data=file_get_contents("php://input");
+    $decoded_products_data=json_decode($products_data,true);
+
+    $shop_id=$decoded_products_data['shop_id'];
+    $display_product_query="SELECT * FROM productdetails where pid=$shop_id";
+    $display_query_response=mysqli_query($conn,$display_product_query);
+    while ($row=mysqli_fetch_assoc($display_query_response)) {
+        $products[]=(object)$row;
+    }
+    echo json_encode($products);
 }
 
 ?>
