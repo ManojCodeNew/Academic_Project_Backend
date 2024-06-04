@@ -44,5 +44,17 @@ if ($requestMethod=="POST" && $type=="add_product") {
     }
     echo json_encode($products);
 }
+elseif ($requestMethod=="POST" && $type=="delete_product") {
+    header("Content-Type:application/json");
+    $delete_products_data=file_get_contents("php://input");
+    $decoded_delete_products_data=json_decode($delete_products_data,true);
+    $deleted_product_id=$decoded_delete_products_data['product_id'];
+
+    $product_delete_query="DELETE FROM productdetails where product_no=$deleted_product_id";
+    mysqli_query($conn,$product_delete_query);
+
+    $msg=array("status"=>"product deleted Successfully");
+    echo json_encode($msg);
+}
 
 ?>
