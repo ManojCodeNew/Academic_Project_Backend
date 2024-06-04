@@ -2,7 +2,7 @@
 header("Access-Control-Allow-Origin:*");
 header("Access-Control-Allow-Headers:Content-Type");
 
-$server = "localhost";
+$server = "localhost:3307";
 $username = "root";
 $password = "";
 $database = "User";
