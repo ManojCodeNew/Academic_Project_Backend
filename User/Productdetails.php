@@ -18,11 +18,11 @@ if ($requestType == "POST" && $type == "products") {
     $id = $decoded_product_id['Id'];
     // echo json_encode($id);
 
-    $product_data_fetch_sql = "SELECT * FROM productdetails,shopdetails where pid=$id";
+    $product_data_fetch_sql = "SELECT * FROM productdetails where pid=$id";
     $result = mysqli_query($conn, $product_data_fetch_sql);
     if (mysqli_num_rows($result)>0) {
         while ($row = mysqli_fetch_assoc($result)) {
-            $products_data[] = $row;
+            $products_data[]=(object) $row;
         }
         echo json_encode($products_data);
     }
