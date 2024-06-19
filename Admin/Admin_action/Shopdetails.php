@@ -29,6 +29,16 @@ if ($requestMethod=="POST" && $type=="insert_shop" ) {
     $shop_contact_details=$decoded_shopdetails_data['shop_contact_details'];
     $shop_email=$decoded_shopdetails_data['shop_email'];
 
+    // Image converting process
+    
+    // function Imgupload() {
+        
+    // }
+    // $shopImg=$_FILES['ImgUrl']['name'];
+    // session_start();
+    // $_SESSION['img']=$shopImg;
+    
+
 $Success=array("success"=>[$shop_id,$shop_name,$shop_owner_name,$shop_category,$shop_location,$shop_timings,$shop_imgUrl,$shop_logoUrl,$shop_contact_details,$shop_email]);
 $Error= array("Error"=>"Invalid field");
 
@@ -36,6 +46,8 @@ $insert_query="INSERT INTO shopdetails (`sid`,`shopname`,`ownername`,`Location`,
 
 $response=mysqli_query($conn,$insert_query);
 if ($response) {
+    // $data=$_POST['ImgUrl'];
+    // print_r(json_encode(array('img'=>"$data")));
     print_r(json_encode($Success));
 
 }
